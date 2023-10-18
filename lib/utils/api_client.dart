@@ -40,8 +40,8 @@ class ApiClient extends GetxService {
 
       if (kDebugMode) {
         print("url===> $uri");
-        print("Header===> $_mainHeader");
-        print("Response ===>${response.body}");
+        // print("Header===> $_mainHeader");
+        // print("Response ===>${response.body}");
       }
 
       return handelResponse(response, url);

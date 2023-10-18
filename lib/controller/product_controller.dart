@@ -18,6 +18,10 @@ class ProductController extends GetxController implements GetxService {
   TextEditingController categoryIdController = TextEditingController();
   TextEditingController image1Controller = TextEditingController();
   TextEditingController image2Controller = TextEditingController();
+  int limit = 14;
+  int offset = 0;
+  int page = 1;
+  bool hasMoreData = true;
 
   Future<void> getProductList() async {
     isLoading = true;
@@ -28,6 +32,51 @@ class ProductController extends GetxController implements GetxService {
         ProductModel productModel = ProductModel.fromJson(element);
         productList.add(productModel);
       });
+      isLoading = false;
+      update();
+    } else {
+      isLoading = false;
+      update();
+    }
+  }
+
+  // get product list
+  Future<void> getProduct({int page = 1}) async {
+    // offset = offset + limit;
+    if (page == 1) {
+      isLoading = true;
+      hasMoreData = true;
+      productList = [];
+      this.page = 1;
+      offset = 0; // Reset offset for the first page
+    } else {
+      // Calculate the next offset based on the previous offset and limit
+      offset = offset + limit;
+    }
+    isLoading = true;
+    Response response = await apiClient.getData(
+        '${AppConstant.GETPRODUCT}?offset=$offset&limit=$limit'); //?offset=10&limit=10
+
+    // print('response===> ${response.body}');
+    // print(
+    //     'next page ===> ${AppConstant.GETPRODUCT}?offset=$offset&limit=$limit');
+
+    if (response.statusCode == 200) {
+      List<dynamic> responseData = response.body;
+      if (responseData.isNotEmpty) {
+        responseData.forEach(
+          (element) {
+            ProductModel productModel = ProductModel.fromJson(element);
+            productList.add(productModel);
+          },
+        );
+        this.page++;
+        // print('hello');
+      } else {
+        // No more data available
+        hasMoreData = false;
+      }
+
       isLoading = false;
       update();
     } else {

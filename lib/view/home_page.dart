@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: ElevatedButton(
             onPressed: () {
-              Get.to(ProductListPage());
+              Get.to(const ProductListPage());
             },
             child: const Text("Product List")),
       ),
