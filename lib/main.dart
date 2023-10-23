@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_argument/utils/get_di.dart' as di;
 import 'package:get_argument/view/home_page.dart';
+import 'package:get_argument/view/tabbar.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +17,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return  GetMaterialApp(
       title: 'Flutter Demo',
-      home: HomePage(),
+      home: MyTabBarScreen(),
       // initialRoute: Routes.homePage,
       // getPages: getPages,
     );
