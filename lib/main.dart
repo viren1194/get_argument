@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_argument/utils/get_di.dart' as di;
 import 'package:get_argument/view/home_page.dart';
-import 'package:get_argument/view/tabbar.dart';
+import 'package:get_argument/view/datepicker.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  GetMaterialApp(
       title: 'Flutter Demo',
-      home: MyTabBarScreen(),
+      home: DatePickerScreen(),
       // initialRoute: Routes.homePage,
       // getPages: getPages,
     );
