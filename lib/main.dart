@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_argument/utils/get_di.dart' as di;
+import 'package:get_argument/view/dropdown.dart';
 import 'package:get_argument/view/home_page.dart';
 import 'package:get_argument/view/datepicker.dart';
 
@@ -17,9 +18,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  GetMaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
-      home: DatePickerScreen(),
+      home: DropdownPage(),
       // initialRoute: Routes.homePage,
       // getPages: getPages,
     );

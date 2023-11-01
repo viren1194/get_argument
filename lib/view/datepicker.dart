@@ -12,29 +12,16 @@ class DatePickerScreen extends StatefulWidget {
 
 class _DatePickerScreenState extends State<DatePickerScreen> {
   DateTime? _selectedDate;
+  DateTime? startDate;
+  DateTime? endDate;
 
   String _range = '';
 
-  // Create an instance of the DateRangePicker
-  late SfDateRangePicker dateRangePicker;
-
-  @override
-  void initState() {
-    super.initState();
-
-    dateRangePicker = SfDateRangePicker(
-      onSelectionChanged: _onSelectionChanged,
-      selectionMode: DateRangePickerSelectionMode.range,
-      initialSelectedRange: PickerDateRange(
-        DateTime.now(),
-        DateTime.now().add(const Duration(days: 3)),
-      ),
-      initialDisplayDate: _selectedDate,
-      initialSelectedDate: _selectedDate,
-    );
-  }
-
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    startDate = args.value.startDate;
+    endDate = args.value.endDate;
+    print('start date ==> ${startDate}');
+    print('end date ==> ${endDate}');
     setState(() {
       if (args.value is PickerDateRange) {
         _range =
@@ -55,12 +42,29 @@ class _DatePickerScreenState extends State<DatePickerScreen> {
             children: [
               ElevatedButton(
                 onPressed: () {
+                  PickerDateRange? selectedDateRange;
                   Get.defaultDialog(
                     title: 'Pick Date',
                     content: SizedBox(
                       height: 300,
                       width: 300,
-                      child: dateRangePicker,
+                      child: SfDateRangePicker(
+                        showTodayButton: true,
+                        showActionButtons: true,
+                        todayHighlightColor: Colors.red,
+                        onSelectionChanged: _onSelectionChanged,
+                        selectionMode: DateRangePickerSelectionMode.range,
+                        initialSelectedRange:
+                            PickerDateRange(startDate, endDate),
+                        initialDisplayDate: startDate,
+                        onSubmit: (dateRange) {
+                          selectedDateRange = dateRange as PickerDateRange?;
+                          Get.back();
+                        },
+                        onCancel: () {
+                          Get.back();
+                        },
+                      ),
                     ),
                   );
                 },
