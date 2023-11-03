@@ -10,31 +10,9 @@ class DropdownPage extends StatefulWidget {
 }
 
 class _DropdownPageState extends State<DropdownPage> {
-  String? selectedState;
-  String? selectedCity;
+  // String? selectedState;
+  // String? selectedCity;
 
-  // List<Map<String, String>> citiesData = [
-  //   {"id": "1", "name": "Mumbai", "state": "Maharashtra"},
-  //   {"id": "2", "name": "Delhi", "state": "Delhi"},
-  //   {"id": "3", "name": "Bengaluru", "state": "Karnataka"},
-  //   {"id": "4", "name": "Ahmedabad", "state": "Gujarat"},
-  //   {"id": "5", "name": "Hyderabad", "state": "Telangana"},
-  //   {"id": "6", "name": "Chennai", "state": "Tamil Nadu"},
-  //   {"id": "7", "name": "Kolkata", "state": "West Bengal"},
-  //   {"id": "8", "name": "Pune", "state": "Maharashtra"},
-  //   {"id": "9", "name": "Jaipur", "state": "Rajasthan"},
-  //   {"id": "10", "name": "Surat", "state": "Gujarat"},
-  //   {"id": "11", "name": "Lucknow", "state": "Uttar Pradesh"},
-  //   {"id": "12", "name": "Kanpur", "state": "Uttar Pradesh"},
-  //   {"id": "13", "name": "Nagpur", "state": "Maharashtra"},
-  //   {"id": "14", "name": "Patna", "state": "Bihar"},
-  //   {"id": "15", "name": "Indore", "state": "Madhya Pradesh"},
-  //   {"id": "16", "name": "Thane", "state": "Maharashtra"},
-  //   {"id": "17", "name": "Bhopal", "state": "Madhya Pradesh"},
-  //   {"id": "18", "name": "Visakhapatnam", "state": "Andhra Pradesh"},
-  //   {"id": "19", "name": "Vadodara", "state": "Gujarat"},
-  //   {"id": "20", "name": "Firozabad", "state": "Uttar Pradesh"}
-  // ];
   @override
   void initState() {
     // TODO: implement initState
@@ -47,50 +25,114 @@ class _DropdownPageState extends State<DropdownPage> {
     return Scaffold(
       appBar: AppBar(),
       body: GetBuilder<CityController>(builder: (cityController) {
-        return Column(
-          children: [
-            ////// for state dropdown
-            DropdownButton(
-              items: cityController.states.map((state) {
-                return DropdownMenuItem<String>(
-                  value: state,
-                  child: Text(state),
-                );
-              }).toList(),
-              value: selectedState,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedState = newValue!;
-                  selectedCity = null;
-                });
-              },
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            ////// for city dropdown
-            DropdownButton(
-              items: cityController.cities
-                  .where((city) =>
-                      city.state == selectedState && city.name != null)
-                  .map((city) {
-                return DropdownMenuItem<String>(
-                  value: city.name!,
-                  child: Text(city.name!),
-                );
-              }).toList(),
-              value: selectedCity,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedCity = newValue ?? '';
-                });
-              },
-            ),
-            Text('Selected state: $selectedState'),
-            Text('Selected city: $selectedCity'),
-          ],
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              CommonDropdown(
+                title: 'select state',
+                prefixIcon: Icons.add,
+                hint: "Select state",
+                items: cityController.states.map((state) {
+                  return DropdownMenuItem<String>(
+                    value: state,
+                    child: Text(state),
+                  );
+                }).toList(),
+                selectedValue: cityController.selectedState,
+                onChanged: (newValue) {
+                  cityController.updateState(newValue!);
+                  // setState(() {
+                  //   selectedState = newValue;
+                  //   selectedCity = null;
+                  // });
+                },
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              CommonDropdown(
+                title: 'select city',
+                prefixIcon: Icons.remove,
+                hint: "Select city",
+                items: cityController.cities
+                    .where((city) =>
+                        city.state == cityController.selectedState &&
+                        city.name != null)
+                    .map((city) {
+                  return DropdownMenuItem<String>(
+                    value: city.name!,
+                    child: Text(city.name!),
+                  );
+                }).toList(),
+                selectedValue: cityController.selectedCity,
+                onChanged: (newValue) {
+                  cityController.updateCity(newValue!);
+                  // setState(() {
+                  //   selectedCity = newValue;
+                  // });
+                },
+              ),
+
+              ////// for state dropdown
+              const SizedBox(
+                height: 50,
+              ),
+
+              Text('Selected state: ${cityController.selectedState}'),
+              Text('Selected city: ${cityController.selectedCity}'),
+            ],
+          ),
         );
       }),
+    );
+  }
+}
+
+class CommonDropdown extends StatelessWidget {
+  final String title;
+  final IconData prefixIcon;
+  final String hint;
+  final List<DropdownMenuItem<String>> items;
+  final String? selectedValue;
+  final ValueChanged<String?> onChanged;
+
+  CommonDropdown({
+    required this.title,
+    required this.prefixIcon,
+    required this.hint,
+    required this.items,
+    required this.selectedValue,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: DropdownButtonFormField(
+            decoration: InputDecoration(
+              prefixIcon: Icon(prefixIcon),
+              border: InputBorder.none,
+            ),
+            items: items,
+            value: selectedValue,
+            hint: Text(hint),
+            icon: const Icon(Icons.keyboard_arrow_down_rounded),
+            onChanged: onChanged,
+          ),
+        ),
+      ],
     );
   }
 }

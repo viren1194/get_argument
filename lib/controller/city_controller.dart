@@ -13,6 +13,7 @@ class CityController extends GetxController implements GetxService {
 
   void updateState(String value) {
     selectedState = value;
+    selectedCity = null;
     update();
   }
 
