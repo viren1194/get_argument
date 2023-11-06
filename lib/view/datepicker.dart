@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get_argument/view/html_pdf.dart';
 import 'package:get_argument/view/pdf_view.dart';
@@ -75,20 +76,30 @@ class _DatePickerScreenState extends State<DatePickerScreen> {
               const SizedBox(
                 height: 100,
               ),
-              ElevatedButton(
-                  onPressed: () async {
-                    // convertToPdf();
+             
+              const SizedBox(
+                height: 100,
+              ),
+              TextField(
+                maxLines: 3,
+                decoration: InputDecoration(
+                  floatingLabelAlignment: FloatingLabelAlignment.center,
+                  // alignLabelWithHint: ,
 
-                    // Get.to(PdfviewScreen());
-                    await convertToPdf().then((filePath) {
-                      Get.to(PdfviewScreen(filePath: filePath));
-                    });
-                  },
-                  child: const Text('convert'))
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelText: 'hello good',
+                  hintText: "hello",
+                  isDense: true,
+                  prefixIcon: Icon(Icons.remove),
+                ),
+              )
             ],
           ),
         ),
       ),
     );
   }
+
 }
